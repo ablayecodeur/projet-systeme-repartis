@@ -48,6 +48,12 @@ eval $(minikube docker-env)
 docker build -t backend:v1 ./backend
 docker build -t frontend:v8 ./frontend
 
+# Créer le secret DB (voir k8s/db-secret.example.yaml pour le détail)
+kubectl create secret generic db-credentials \
+  --from-literal=POSTGRES_DB=microdb \
+  --from-literal=POSTGRES_USER=microuser \
+  --from-literal=POSTGRES_PASSWORD='<un-vrai-mot-de-passe>'
+
 # Déploiement via Ansible (démarre Minikube si besoin puis applique k8s/)
 ansible-playbook -i ansible/inventory.ini ansible/playbook.yml
 
@@ -97,6 +103,8 @@ DJANGO_DEBUG=false
 - Pas encore de CI/CD (aucun workflow GitHub Actions pour l'instant).
 - Le frontend React n'a qu'un écran de démonstration (liste des produits).
 - Les migrations `venv/` de l'historique git seront progressivement purgées.
+- `CORS_ALLOW_ALL_ORIGINS = True` reste volontairement permissif pour le développement
+  local ; à restreindre (`CORS_ALLOWED_ORIGINS`) avant tout déploiement exposé.
 
 ## Licence
 

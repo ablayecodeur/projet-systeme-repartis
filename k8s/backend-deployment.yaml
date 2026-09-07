@@ -20,11 +20,20 @@ spec:
             - containerPort: 8000
           env:
             - name: DB_NAME
-              value: microdb
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: POSTGRES_DB
             - name: DB_USER
-              value: microuser
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: POSTGRES_USER
             - name: DB_PASSWORD
-              value: micro123
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: POSTGRES_PASSWORD
             - name: DB_HOST
               value: postgres
             - name: DB_PORT
