@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
 
+// En dev via docker-compose : http://localhost:8000/api/produits/
+// En cluster Minikube : IP + NodePort du service backend (voir .env)
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8000/api/produits/";
+
 function App() {
   const [produits, setProduits] = useState([]);
 
   useEffect(() => {
-    fetch("http://192.168.49.2:32692/api/produits/")
+    fetch(API_URL)
       .then((response) => response.json())
       .then((data) => setProduits(data))
       .catch((error) => console.error("Erreur :", error));

@@ -5,9 +5,9 @@ services:
     image: postgres:15
     container_name: postgres_db
     environment:
-      POSTGRES_DB: microdb
-      POSTGRES_USER: microuser
-      POSTGRES_PASSWORD: micro123
+      POSTGRES_DB: ${DB_NAME:-microdb}
+      POSTGRES_USER: ${DB_USER:-microuser}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD must be set in .env}
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
@@ -24,10 +24,13 @@ services:
     depends_on:
       - db
     environment:
-      DB_NAME: microdb
-      DB_USER: microuser
-      DB_PASSWORD: micro123
+      DB_NAME: ${DB_NAME:-microdb}
+      DB_USER: ${DB_USER:-microuser}
+      DB_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD must be set in .env}
       DB_HOST: db
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:-django-insecure-dev-only-key-do-not-use-in-production}
+      DJANGO_DEBUG: ${DJANGO_DEBUG:-True}
+      DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS:-localhost,127.0.0.1}
 
   frontend:
     build: ./frontend
